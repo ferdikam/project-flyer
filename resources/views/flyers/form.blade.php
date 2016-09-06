@@ -1,3 +1,4 @@
+@inject('countries', 'App\Http\Utilities\Country')
 <div class="form-group">
     <label for="street">Name:</label>
     <input type="text" name="street" id="street" class="form-control" value="{{ old('street') }}">
