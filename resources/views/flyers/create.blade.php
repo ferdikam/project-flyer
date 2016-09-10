@@ -3,8 +3,7 @@
 @section('content')
     <h1>Selling your home?</h1>
     <hr>
-    <div class="row">
-        <form enctype="multipart/form-data" action="/flyers" method="POST" class="col-md-6">
+        <form enctype="multipart/form-data" action="/flyers" method="POST">
             @include('flyers.form')
 
             @if(count($errors) > 0)
@@ -17,5 +16,4 @@
                 </div>
             @endif
         </form>
-    </div>
 @stop
