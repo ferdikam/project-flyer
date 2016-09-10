@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/libs.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css" />
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
@@ -85,6 +85,8 @@
     <!-- Scripts -->
     <script src="/js/app.js"></script>
     <script src="/js/libs.js"></script>
+    @yield('scripts.footer')
+
     @include('flash')
 </body>
 </html>
