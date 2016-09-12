@@ -3,27 +3,50 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\UploadedFile;
+use Image;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Photo extends Model
 {
     protected $table = 'flyer_photos';
 
-    protected $fillable = ['path'];
+    protected $fillable = ['path', 'name', 'thumbnail_path'];
 
     protected $baseDir = 'flyers/photos';
 
-    public static function fromForm(UploadedFile $file)
+    /**
+     * @param UploadedFile $file
+     * @return mixed
+     */
+    public static function named($name)
     {
-        $photo = new static;
+        return (new static)->saveAs($name);
+    }
 
-        $name = time() . $file->getClientOriginalName();
+    protected function saveAs($name)
+    {
+        $this->name = sprintf("%s-%s", time(), $name);
+        $this->path = sprintf("%s/%s", $this->baseDir, $this->name);
+        $this->thumbnail_path = sprintf("%s/tn-%s", $this->baseDir, $this->name);
 
-        $photo->path = $photo->baseDir . '/' . $name;
+        return $this;
+    }
 
-        $file->storePubliclyAs($photo->baseDir, $name, 'public_path');
+    public function move(UploadedFile $file)
+    {
+        $file->move($this->baseDir, $this->name);
+        //$file->storePubliclyAs($this->baseDir, $this->name, 'public_path');
 
-        return $photo;
+        $this->makeThumbnail();
+
+        return $this;
+    }
+
+    protected function makeThumbnail()
+    {
+        Image::make($this->path)
+            ->fit(200)
+            ->save($this->thumbnail_path);
     }
 
     public function flyer()
